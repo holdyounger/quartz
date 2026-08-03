@@ -1,3 +1,48 @@
 @use "./variables.scss" as *;
 
 // put your custom CSS here!
+
+// ===== Viewer.js 图片查看器 =====
+// Viewer.js 自带样式，仅需补充少量覆盖
+
+// 图片悬停提示
+article img {
+  cursor: zoom-in;
+  transition: opacity 0.15s ease;
+}
+
+article img:hover {
+  opacity: 0.85;
+}
+
+// Viewer.js 工具栏修复 — 覆盖 Quartz 全局 li 样式
+.viewer-toolbar {
+  text-align: center;
+}
+
+.viewer-toolbar > ul {
+  display: inline-block;
+  overflow: hidden;
+  padding: 6px 3px;
+  margin: 0 auto 5px;
+}
+
+.viewer-toolbar > ul > li {
+  list-style: none;
+  line-height: 0;
+  float: left;
+  height: 24px;
+  width: 24px;
+  margin: 0 2px;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  cursor: pointer;
+
+  // 确保图标伪元素居中
+  &::before {
+    margin: 2px !important;
+  }
+}
+
+// Viewer.js 适配亮色模式（默认深色，无需额外处理）

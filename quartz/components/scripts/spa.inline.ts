@@ -219,3 +219,85 @@ if (!customElements.get("route-announcer")) {
     },
   )
 }
+
+// ===== Viewer.js 图片查看器（放大/缩小/旋转/翻转）=====
+function initViewerJS() {
+  // 动态加载 Viewer.js CSS
+  const cssLink = document.createElement("link")
+  cssLink.rel = "stylesheet"
+  cssLink.href = "https://cdn.jsdelivr.net/npm/viewerjs@1.11.7/dist/viewer.min.css"
+  document.head.appendChild(cssLink)
+
+  // 动态加载 Viewer.js JS
+  const script = document.createElement("script")
+  script.src = "https://cdn.jsdelivr.net/npm/viewerjs@1.11.7/dist/viewer.min.js"
+  script.onload = () => {
+    setupViewer()
+  }
+  document.head.appendChild(script)
+
+  let currentViewer: any = null
+
+  function setupViewer() {
+    if (currentViewer) {
+      currentViewer.destroy()
+      currentViewer = null
+    }
+
+    // 查找文章内容容器
+    const container = document.querySelector("article") as HTMLElement
+    if (!container || !(window as any).Viewer) return
+
+    currentViewer = new (window as any).Viewer(container, {
+      inline: false,
+      button: true,
+      navbar: false,
+      title: false,
+      tooltip: false,
+      movable: true,
+      zoomable: true,
+      rotatable: true,
+      scalable: true,
+      minZoomRatio: 0.1,
+      maxZoomRatio: 10,
+      zoomRatio: 0.2,
+      transition: true,
+      keyboard: true,
+      backdrop: true,
+      loading: true,
+      className: "quartz-viewer",
+      filter(image: HTMLImageElement) {
+        // 只处理文章内的图片
+        return !!image.closest("article")
+      },
+      toolbar: {
+        zoomIn: true,
+        zoomOut: true,
+        oneToOne: true,
+        reset: true,
+        prev: false,
+        play: false,
+        next: false,
+        rotateLeft: true,
+        rotateRight: true,
+        flipHorizontal: true,
+        flipVertical: true,
+      },
+    })
+  }
+
+  // SPA 导航时重新初始化
+  document.addEventListener("nav", () => {
+    setTimeout(setupViewer, 100)
+  })
+
+  // 清理函数
+  window.addCleanup?.(() => {
+    if (currentViewer) {
+      currentViewer.destroy()
+      currentViewer = null
+    }
+  })
+}
+
+initViewerJS()
