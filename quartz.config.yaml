@@ -74,7 +74,7 @@ plugins:
       keepBackground: false
       clipboard: false
     order: 20
-  - source: github:holdyounger/quartz-codeblock-enhancer
+  - source: ./quartz/plugins/codeblockEnhancer
     enabled: true
     order: 25
   - source: github:quartz-community/obsidian-flavored-markdown
